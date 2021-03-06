@@ -38,11 +38,33 @@ document.addEventListener("DOMContentLoaded", () => {
         square.addEventListener('dragenter', dragEnter)
         square.addEventListener('dragleave', dragLeave)
         square.addEventListener('drop', dragDrop)
+
+        square.addEventListener('touchstart', touchStart);
+        square.addEventListener('touchmove', touchMove);
+        square.addEventListener('touchend', touchEnd);
     })
 
     function dragStart(e) {
         candyBeingDragged = getCandy(this);
     }
+
+    function touchStart(e) {
+        candyBeingDragged = getCandy(e.touches[0].target);
+    }
+
+    function touchMove(e) {
+        e.preventDefault();
+    }
+
+    function touchEnd(e) {
+        var endTarget = document.elementFromPoint(
+            e.changedTouches[0].pageX,
+            e.changedTouches[0].pageY
+        );
+        candyBeingReplaced = getCandy(endTarget);
+        dragEnd(null);
+    }
+
     function dragEnd(e) {
         let validMoves = [
             candyBeingDragged.id - width,
